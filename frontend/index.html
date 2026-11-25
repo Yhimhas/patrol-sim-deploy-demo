@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Patrol Sim 部署验收</title>
+    <style>
+        :root {
+            font: 16px/1.65 system-ui, sans-serif;
+            color: #172934;
+            background: #edf3f5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 1.25rem;
+            box-sizing: border-box;
+        }
+
+        main {
+            width: min(100%, 33rem);
+            box-sizing: border-box;
+            padding: clamp(1.5rem, 5vw, 2.75rem);
+            background: #fff;
+            border: 1px solid #cbd9df;
+            border-top: 4px solid #006b5e;
+            border-radius: 1rem;
+        }
+
+        h1 {
+            margin: 0 0 .65rem;
+            font-size: clamp(1.65rem, 5vw, 2.4rem);
+            line-height: 1.2;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: .6rem 1rem;
+            border: 0;
+            border-radius: .5rem;
+            background: #006b5e;
+            color: #fff;
+            font: inherit;
+            font-weight: 650;
+            cursor: pointer;
+        }
+
+        button:focus-visible {
+            outline: 3px solid #174b91;
+            outline-offset: 4px;
+        }
+
+        button:disabled {
+            opacity: .65;
+            cursor: progress;
+        }
+
+        #api-result {
+            margin-bottom: 0;
+            padding: .65rem .85rem;
+            border-radius: .5rem;
+            background: #edf3f5;
+            overflow-wrap: anywhere;
+        }
+
+        #api-result[data-state="success"] { color: #005846; background: #e5f5ed; }
+        #api-result[data-state="error"] { color: #9a271e; background: #fbecea; }
+    </style>
+    <script src="/app.js" defer></script>
+</head>
+<body>
+    <main>
+        <h1>Patrol Sim 部署验收</h1>
+        <p>页面已加载。检查后端能否通过同一个站点地址访问。</p>
+        <button type="button" id="check-api">检查 API</button>
+        <p id="api-result" role="status">等待检查</p>
+    </main>
+</body>
+</html>

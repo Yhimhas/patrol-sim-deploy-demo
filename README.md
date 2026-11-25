@@ -1,25 +1,31 @@
-# 基于 Web 的智能巡检机器人二维仿真系统
+# Patrol Sim 部署验收样例
 
-本项目是 广东海洋大学阳江校区人工智能协会 培训班的结课作品。我们将机器人的巡检场景搬到浏览器中，通过二维地图展示机器人如何移动，以及它的位置、朝向和运行状态如何随操作变化。
+广东海洋大学阳江校区人工智能协会培训班工作组使用此样例，演练从 GitHub 收件、Coolify 构建到公网发布的流程。打开页面并点击「检查 API」，即可验证静态资源、前端反向代理和后端响应。
 
-## 在线演示
+## 本地运行
 
-可操作的在线演示部署在 `XXX`。打开演示页面后，可以查看二维地图、手动控制机器人，并观察操作后的状态变化。
+在仓库根目录运行以下命令。
 
-本项目还展示了 `XXX`。
+```bash
+docker compose up -d --build --wait
+```
 
-## 技术选型
+打开浏览器访问 `http://127.0.0.1:22001/`。前端容器监听 `8080`，通过 Compose 网络访问后端的 `8000` 端口。
 
-- 前端使用 `XXX` 开发页面和操作界面。
-- 后端使用 `XXX` 提供 API。
-- 二维地图和机器人使用 `XXX` 绘制。
-- 仿真逻辑使用 `XXX` 实现。
-- CI 使用 `XXX` 运行自动检查。
-- Docker 部署使用 `XXX`。
+如需更改配置，将 `.env.example` 复制为 `.env`。`SMOKE_HTTP_BIND` 和 `SMOKE_HTTP_PORT` 控制宿主机监听地址和端口，`SMOKE_NAME` 会随 API 响应返回，便于确认环境变量已注入。完成本地验收后执行 `docker compose down`。
 
-## 项目文档
+## Coolify 导入
 
-- 了解功能范围和验收方式，见[项目需求](docs/01_项目需求.md)。
-- 查看模块职责和数据流向，见[项目架构与接口](docs/03_项目架构与接口.md)。
-- 本地启动与 Docker 部署步骤，见[运行说明](docs/04_运行与结业提交.md)。
-- 查看团队成员及各自完成的内容，见[小组分工](docs/02_小组分工.md)。
+1. 用此样例的 GitHub 仓库链接创建 **Public Git Repository** 应用，选择包含样例的部署分支。
+2. 构建方式选择 **Docker Compose**，Base Directory 填 `/`，Compose Location 填 `/compose.yaml`。
+3. 保留默认回环绑定进行服务器本机验证。需要 OpenResty 跨主机访问时，按工作组分配的内网地址和端口填写 `SMOKE_HTTP_BIND`、`SMOKE_HTTP_PORT`，并核对网关可达性。
+4. 手动部署，记录部署的 commit。接入测试域名后，用域名重复以下检查。
+
+## 验收检查
+
+| 检查项 | 预期结果 |
+| --- | --- |
+| `GET /` | HTTP 200，显示「Patrol Sim 部署验收」 |
+| `GET /app.js` | HTTP 200，浏览器可以加载检查脚本 |
+| `GET /api/health` | HTTP 200，返回 `{"status":"ok","service":"patrol-sim-smoke"}`，其中 `service` 随 `SMOKE_NAME` 变化 |
+| 点击「检查 API」 | 页面显示「API 正常」及服务标识 |

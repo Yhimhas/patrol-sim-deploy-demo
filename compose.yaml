@@ -1,0 +1,25 @@
+name: patrol-sim-deploy-smoke
+
+services:
+  backend:
+    build: ./backend
+    environment:
+      SMOKE_NAME: ${SMOKE_NAME:-patrol-sim-smoke}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=2).close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${SMOKE_HTTP_BIND:-127.0.0.1}:${SMOKE_HTTP_PORT:-22001}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
